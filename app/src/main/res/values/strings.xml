@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Gallery_and_memories</string>
+    <string name="tvSaludo">Hola Mundo!</string>
+    <string name="btnSaludo">Click para Saludar</string>
+    <string name="btncrearDB">Crear DB</string>
+
+    <string name="hint_nombre">Nombre</string>
+    <string name="hint_telefono">Teléfono</string>
+    <string name="hint_email">Email</string>
+    <string name="btnGuardar">Guardar</string>
+    <string name="btnCrearRegistro">Crear Registro</string>
+    <string name="btnCrearDB">Crear Base de Datos</string>
+    <string name="btn_regresar">Regresar al main</string>
+</resources>
