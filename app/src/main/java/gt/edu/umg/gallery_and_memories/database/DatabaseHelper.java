@@ -16,7 +16,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "PhotoGallery.db";
     private static final int DATABASE_VERSION = 1;
 
-    // Tabla y columnas
     private static final String TABLE_PHOTOS = "photos";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_URI = "uri";
@@ -25,7 +24,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_LATITUDE = "latitude";
     private static final String COLUMN_LONGITUDE = "longitude";
 
-    // Constructor
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -48,7 +46,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // Insertar una nueva foto
     public long insertPhoto(String uri, String description, String date, double latitude, double longitude) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -64,7 +61,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    // Obtener todas las fotos
     public List<PhotoItem> getAllPhotos() {
         List<PhotoItem> photoList = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_PHOTOS + " ORDER BY " + COLUMN_DATE + " DESC";
@@ -91,7 +87,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return photoList;
     }
 
-    // Eliminar una foto
     public boolean deletePhoto(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
         int result = db.delete(TABLE_PHOTOS, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
@@ -99,7 +94,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result > 0;
     }
 
-    // Actualizar una foto
     public boolean updatePhoto(PhotoItem photo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

@@ -2,4 +2,15 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="beige_primary">#E6D5C3</color>
+    <color name="beige_dark">#DEC5A7</color>
+    <color name="beige_light">#FFF5EB</color>
+    <color name="beige_background">#FFF8F0</color>
+
+    <color name="text_primary">#5D4037</color>
+    <color name="text_secondary">#8D6E63</color>
+
+    <color name="preview_background">#F5E6D3</color>
+
 </resources>

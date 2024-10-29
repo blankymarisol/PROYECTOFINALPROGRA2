@@ -34,6 +34,10 @@
         <activity android:name=".models.PhotoItem"
             android:exported="false"/>
 
+        <activity
+            android:name=".galeria.PhotoDetailActivity"
+            android:exported="false" />
+
 
         <activity
             android:name=".MainActivity"

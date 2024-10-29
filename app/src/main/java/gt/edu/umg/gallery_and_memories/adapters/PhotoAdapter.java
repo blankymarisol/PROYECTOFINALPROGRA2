@@ -1,6 +1,7 @@
 package gt.edu.umg.gallery_and_memories.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,24 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import gt.edu.umg.gallery_and_memories.R;
+import gt.edu.umg.gallery_and_memories.galeria.PhotoDetailActivity;
 import gt.edu.umg.gallery_and_memories.models.PhotoItem;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder> {
     private List<PhotoItem> photos;
     private Context context;
-    private OnPhotoClickListener listener;
-
-    public interface OnPhotoClickListener {
-        void onPhotoClick(PhotoItem photo, int position);
-    }
 
     public PhotoAdapter(List<PhotoItem> photos, Context context) {
         this.photos = photos;
         this.context = context;
-    }
-
-    public void setOnPhotoClickListener(OnPhotoClickListener listener) {
-        this.listener = listener;
     }
 
     @NonNull
@@ -46,10 +39,10 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
         PhotoItem photo = photos.get(position);
 
+        // Configurar la imagen
         try {
             holder.imageView.setImageURI(Uri.parse(photo.getUri()));
         } catch (Exception e) {
-            // Si hay error al cargar la imagen, mostrar una imagen por defecto
             holder.imageView.setImageResource(R.drawable.troleohelmado);
         }
 
@@ -58,11 +51,17 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
         holder.dateView.setText(photo.getDate());
 
         // Configurar el click listener
-        holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onPhotoClick(photo, position);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> openPhotoDetail(photo));
+    }
+
+    private void openPhotoDetail(PhotoItem photo) {
+        Intent intent = new Intent(context, PhotoDetailActivity.class);
+        intent.putExtra(PhotoDetailActivity.EXTRA_PHOTO_URI, photo.getUri());
+        intent.putExtra(PhotoDetailActivity.EXTRA_PHOTO_DESC, photo.getDescription());
+        intent.putExtra(PhotoDetailActivity.EXTRA_PHOTO_DATE, photo.getDate());
+        intent.putExtra(PhotoDetailActivity.EXTRA_PHOTO_LAT, photo.getLatitude());
+        intent.putExtra(PhotoDetailActivity.EXTRA_PHOTO_LON, photo.getLongitude());
+        context.startActivity(intent);
     }
 
     @Override
