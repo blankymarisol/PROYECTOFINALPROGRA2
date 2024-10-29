@@ -1,6 +1,7 @@
 package gt.edu.umg.gallery_and_memories.galeria;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,6 +9,8 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -51,7 +54,6 @@ public class GaleriaActivity extends AppCompatActivity {
     private DatabaseHelper dbHelper;
     private PhotoAdapter photoAdapter;
     private Location currentLocation;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,7 +217,6 @@ public class GaleriaActivity extends AppCompatActivity {
 
             photoInfoText.setText(infoText);
 
-            // Guardar la foto en la base de datos
             String description = photoDescription.getText().toString().trim();
             if (description.isEmpty()) {
                 description = "Sin descripción";
@@ -231,8 +232,8 @@ public class GaleriaActivity extends AppCompatActivity {
 
             if (photoId != -1) {
                 Toast.makeText(this, "Foto guardada exitosamente", Toast.LENGTH_SHORT).show();
-                photoDescription.setText(""); // Limpiar la descripción
-                loadPhotos(); // Recargar la lista de fotos
+                photoDescription.setText("");
+                loadPhotos();
             } else {
                 Toast.makeText(this, "Error al guardar la foto", Toast.LENGTH_SHORT).show();
             }
@@ -244,6 +245,6 @@ public class GaleriaActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadPhotos(); // Recargar fotos cuando se regrese a la actividad
+        loadPhotos();
     }
 }

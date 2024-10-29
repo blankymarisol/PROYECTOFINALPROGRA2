@@ -23,21 +23,22 @@
         android:theme="@style/Theme.Gallery_and_memories"
         tools:targetApi="31">
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD8x8KEO9sA2yFsV2_vf8J_DgqxI5HFSfY"/>
+
         <activity
             android:name=".gps.GpsActivity"
-            android:exported="false"/>
+            android:exported="true"
+            android:label="Gps Activity"/>
 
         <activity
             android:name=".galeria.GaleriaActivity"
             android:exported="false"/>
 
-        <activity android:name=".models.PhotoItem"
-            android:exported="false"/>
-
         <activity
             android:name=".galeria.PhotoDetailActivity"
             android:exported="false" />
-
 
         <activity
             android:name=".MainActivity"
