@@ -52,6 +52,7 @@ public class GaleriaActivity extends AppCompatActivity {
     private PhotoAdapter photoAdapter;
     private Location currentLocation;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

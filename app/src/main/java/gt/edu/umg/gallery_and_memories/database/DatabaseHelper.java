@@ -1,18 +1,21 @@
 package gt.edu.umg.gallery_and_memories.database;
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
+import android.net.Uri;
+import android.util.Log;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import gt.edu.umg.gallery_and_memories.models.PhotoItem;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+    private static final String TAG = "DatabaseHelper";
+    private Context context;
     private static final String DATABASE_NAME = "PhotoGallery.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -26,6 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
@@ -87,11 +91,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return photoList;
     }
 
-    public boolean deletePhoto(long id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int result = db.delete(TABLE_PHOTOS, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+    public PhotoItem getPhotoById(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        PhotoItem photo = null;
+
+        Cursor cursor = db.query(TABLE_PHOTOS, null,
+                COLUMN_ID + " = ?", new String[]{String.valueOf(id)},
+                null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            photo = new PhotoItem(
+                    cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_URI)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE)),
+                    cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_LATITUDE)),
+                    cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_LONGITUDE))
+            );
+            cursor.close();
+        }
+
         db.close();
-        return result > 0;
+        return photo;
+    }
+
+    public boolean deletePhoto(long id) {
+        boolean success = false;
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        try {
+            // Primero obtener la URI de la foto
+            PhotoItem photo = getPhotoById(id);
+            if (photo != null) {
+                String uriString = photo.getUri();
+
+                // Intentar eliminar el archivo físico
+                try {
+                    Uri uri = Uri.parse(uriString);
+                    // Eliminar el archivo usando ContentResolver
+                    context.getContentResolver().delete(uri, null, null);
+                } catch (Exception e) {
+                    Log.e(TAG, "Error al eliminar archivo físico: " + e.getMessage());
+                }
+
+                // Eliminar el registro de la base de datos
+                int result = db.delete(TABLE_PHOTOS, COLUMN_ID + " = ?",
+                        new String[]{String.valueOf(id)});
+                success = result > 0;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error al eliminar foto: " + e.getMessage());
+        } finally {
+            db.close();
+        }
+
+        return success;
     }
 
     public boolean updatePhoto(PhotoItem photo) {
