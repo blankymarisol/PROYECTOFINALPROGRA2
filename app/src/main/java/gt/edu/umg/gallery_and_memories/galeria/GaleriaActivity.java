@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -126,10 +127,8 @@ public class GaleriaActivity extends AppCompatActivity {
     }
 
     private void setupButtonListeners() {
-        btnRegresar.setOnClickListener(v -> {
-            Intent intent = new Intent(GaleriaActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            btnRegresar.setOnClickListener(v -> {
+                finish();
         });
     }
 
@@ -234,6 +233,9 @@ public class GaleriaActivity extends AppCompatActivity {
                 Toast.makeText(this, "Foto guardada exitosamente", Toast.LENGTH_SHORT).show();
                 photoDescription.setText("");
                 loadPhotos();
+
+                // Regresar al MainActivity después de guardar la foto
+                finish();
             } else {
                 Toast.makeText(this, "Error al guardar la foto", Toast.LENGTH_SHORT).show();
             }
@@ -246,5 +248,14 @@ public class GaleriaActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadPhotos();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            // La foto fue eliminada, actualizar la lista
+            loadPhotos();
+        }
     }
 }

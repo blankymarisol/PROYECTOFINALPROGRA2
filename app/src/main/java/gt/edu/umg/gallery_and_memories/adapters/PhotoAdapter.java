@@ -1,5 +1,6 @@
 package gt.edu.umg.gallery_and_memories.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import gt.edu.umg.gallery_and_memories.models.PhotoItem;
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder> {
     private List<PhotoItem> photos;
     private Context context;
+    private static final int REQUEST_DELETE_PHOTO = 1;
 
     public PhotoAdapter(List<PhotoItem> photos, Context context) {
         this.photos = photos;
@@ -56,12 +58,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
 
     private void openPhotoDetail(PhotoItem photo) {
         Intent intent = new Intent(context, PhotoDetailActivity.class);
+        intent.putExtra(PhotoDetailActivity.EXTRA_PHOTO_ID, photo.getId());
         intent.putExtra(PhotoDetailActivity.EXTRA_PHOTO_URI, photo.getUri());
         intent.putExtra(PhotoDetailActivity.EXTRA_PHOTO_DESC, photo.getDescription());
         intent.putExtra(PhotoDetailActivity.EXTRA_PHOTO_DATE, photo.getDate());
         intent.putExtra(PhotoDetailActivity.EXTRA_PHOTO_LAT, photo.getLatitude());
         intent.putExtra(PhotoDetailActivity.EXTRA_PHOTO_LON, photo.getLongitude());
-        context.startActivity(intent);
+
+        // Iniciar la actividad esperando resultado
+        ((Activity) context).startActivityForResult(intent, REQUEST_DELETE_PHOTO);
     }
 
     @Override
