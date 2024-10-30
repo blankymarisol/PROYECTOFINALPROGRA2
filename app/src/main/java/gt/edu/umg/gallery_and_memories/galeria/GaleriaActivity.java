@@ -43,7 +43,7 @@ import gt.edu.umg.gallery_and_memories.adapters.PhotoAdapter;
 
 public class GaleriaActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 123;
-    private ImageView imagePreview;
+    private ImageView imagePreview; //vista previa de la imagen
     private TextView photoInfoText;
     private EditText photoDescription;
     private RecyclerView photoRecyclerView;
@@ -63,6 +63,7 @@ public class GaleriaActivity extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
+        //inicializacion de componentes
         initializeViews();
         setupLocationClient();
         setupCameraLauncher();
@@ -76,6 +77,7 @@ public class GaleriaActivity extends AppCompatActivity {
         permissionLauncher = registerForActivityResult(
                 new ActivityResultContracts.RequestMultiplePermissions(),
                 result -> {
+                    //verifica si todos los permisos fueron concedidos
                     boolean allGranted = true;
                     for (Map.Entry<String, Boolean> entry : result.entrySet()) {
                         if (!entry.getValue()) {
@@ -120,6 +122,7 @@ public class GaleriaActivity extends AppCompatActivity {
         );
     }
 
+    //configura la lista de fotos
     private void setupPhotoRecyclerView() {
         photoRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         photoAdapter = new PhotoAdapter(new ArrayList<>(), this);
@@ -163,14 +166,18 @@ public class GaleriaActivity extends AppCompatActivity {
         }
     }
 
+    //toma la foto
     private void takePhoto() {
         try {
+            //crea valores para el nuevo archivo de imagen
             ContentValues values = new ContentValues();
             values.put(MediaStore.Images.Media.TITLE, "Nueva Foto " + new Date().getTime());
             values.put(MediaStore.Images.Media.DESCRIPTION, "Foto tomada desde la aplicación");
+            //obtener URI para la nueva imagen
             photoUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
             if (photoUri != null) {
+                //abre la camara
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 cameraLauncher.launch(intent);
@@ -182,11 +189,14 @@ public class GaleriaActivity extends AppCompatActivity {
         }
     }
 
+    //manejo del resultado de la camara
     private void handleCameraResult() {
         try {
+            //mostrar imagen tomada
             imagePreview.setImageURI(null);
             imagePreview.setImageURI(photoUri);
 
+            //obtiene ubicacion actual
             if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
                 fusedLocationClient.getLastLocation()
                         .addOnSuccessListener(this, location -> {
@@ -202,11 +212,14 @@ public class GaleriaActivity extends AppCompatActivity {
         }
     }
 
+    //obtiene la informacion de la foto
     private void updatePhotoInfo(Location location) {
         if (location != null) {
+            //obtiene ubicacion actual
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
             String currentDate = sdf.format(new Date());
 
+            //muestra la informacion
             String infoText = String.format(Locale.getDefault(),
                     "Fecha: %s\nUbicación:\nLatitud: %.6f\nLongitud: %.6f",
                     currentDate,
@@ -216,6 +229,7 @@ public class GaleriaActivity extends AppCompatActivity {
 
             photoInfoText.setText(infoText);
 
+            //guarda la informacion en la base de datos
             String description = photoDescription.getText().toString().trim();
             if (description.isEmpty()) {
                 description = "Sin descripción";

@@ -20,10 +20,11 @@ import gt.edu.umg.gallery_and_memories.galeria.PhotoDetailActivity;
 import gt.edu.umg.gallery_and_memories.models.PhotoItem;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder> {
-    private List<PhotoItem> photos;
-    private Context context;
+    private List<PhotoItem> photos; //lista de fotos a mostrar
+    private Context context; //Contexto de la aplicacion
     private static final int REQUEST_DELETE_PHOTO = 1;
 
+    //costructor, inicializa en lista de fotos y contexto
     public PhotoAdapter(List<PhotoItem> photos, Context context) {
         this.photos = photos;
         this.context = context;
@@ -55,7 +56,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
         // Configurar el click listener
         holder.itemView.setOnClickListener(v -> openPhotoDetail(photo));
     }
-
+    //abre una nueva actividad con la foto seleccionada
     private void openPhotoDetail(PhotoItem photo) {
         Intent intent = new Intent(context, PhotoDetailActivity.class);
         intent.putExtra(PhotoDetailActivity.EXTRA_PHOTO_ID, photo.getId());
@@ -74,6 +75,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
         return photos.size();
     }
 
+    //metodo para actualizar la foto en el inicio
     public void updatePhotos(List<PhotoItem> newPhotos) {
         this.photos = newPhotos;
         notifyDataSetChanged();
@@ -86,6 +88,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
 
         PhotoViewHolder(View itemView) {
             super(itemView);
+            //inicializa las vistas
             imageView = itemView.findViewById(R.id.item_photo_image);
             descriptionView = itemView.findViewById(R.id.item_photo_description);
             dateView = itemView.findViewById(R.id.item_photo_date);

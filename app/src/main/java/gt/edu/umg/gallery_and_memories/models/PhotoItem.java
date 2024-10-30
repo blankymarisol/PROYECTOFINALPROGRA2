@@ -1,6 +1,7 @@
 package gt.edu.umg.gallery_and_memories.models;
 
 public class PhotoItem {
+    //VARIABLES DE INSTANCIA
     private long id;
     private String uri;
     private String description;
@@ -8,6 +9,7 @@ public class PhotoItem {
     private double latitude;
     private double longitude;
 
+    //CONSTRUCTOR
     public PhotoItem(long id, String uri, String description, String date, double latitude, double longitude) {
         this.id = id;
         this.uri = uri;
@@ -17,7 +19,7 @@ public class PhotoItem {
         this.longitude = longitude;
     }
 
-    // Getters
+    // Getters (OBTENER)
     public long getId() { return id; }
     public String getUri() { return uri; }
     public String getDescription() { return description; }
@@ -25,7 +27,7 @@ public class PhotoItem {
     public double getLatitude() { return latitude; }
     public double getLongitude() { return longitude; }
 
-    // Setters
+    // Setters (MODIFICAR)
     public void setId(long id) { this.id = id; }
     public void setUri(String uri) { this.uri = uri; }
     public void setDescription(String description) { this.description = description; }

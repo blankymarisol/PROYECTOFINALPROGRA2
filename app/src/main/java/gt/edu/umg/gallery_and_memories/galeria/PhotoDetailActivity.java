@@ -19,13 +19,14 @@ import gt.edu.umg.gallery_and_memories.R;
 import gt.edu.umg.gallery_and_memories.database.DatabaseHelper;
 
 public class PhotoDetailActivity extends AppCompatActivity {
-    public static final String EXTRA_PHOTO_URI = "photo_uri";
+    public static final String EXTRA_PHOTO_URI = "photo_uri"; //constantes para pasar datos
     public static final String EXTRA_PHOTO_DESC = "photo_description";
     public static final String EXTRA_PHOTO_DATE = "photo_date";
     public static final String EXTRA_PHOTO_LAT = "photo_latitude";
     public static final String EXTRA_PHOTO_LON = "photo_longitude";
     public static final String EXTRA_PHOTO_ID = "photo_id";
 
+    //variables de la clase info. foto
     private DatabaseHelper dbHelper;
     private long photoId;
     private String photoUri;
@@ -37,7 +38,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
-        // Obtener el ID de la foto
+        // Obtener informacion de la foto
         photoId = getIntent().getLongExtra(EXTRA_PHOTO_ID, -1);
         photoUri = getIntent().getStringExtra(EXTRA_PHOTO_URI);
 
@@ -45,6 +46,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
         loadPhotoData();
     }
 
+    //configura vistas y listenrs
     private void initializeViews() {
         ImageView fullImageView = findViewById(R.id.fullImageView);
         TextView detailDescription = findViewById(R.id.detailDescription);
@@ -57,7 +59,9 @@ public class PhotoDetailActivity extends AppCompatActivity {
         btnDelete.setOnClickListener(v -> showDeleteConfirmationDialog());
     }
 
+    //carga y muestra detalles de la foto
     private void loadPhotoData() {
+        //obtener fotos del intent xd
         String description = getIntent().getStringExtra(EXTRA_PHOTO_DESC);
         String date = getIntent().getStringExtra(EXTRA_PHOTO_DATE);
         double latitude = getIntent().getDoubleExtra(EXTRA_PHOTO_LAT, 0);
@@ -86,6 +90,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
                 latitude, longitude));
     }
 
+    //pide confirmacion para eliminar foto
     private void showDeleteConfirmationDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Eliminar foto")
@@ -95,9 +100,11 @@ public class PhotoDetailActivity extends AppCompatActivity {
                 .show();
     }
 
+    //proceso de eliminacion
     private void deletePhoto() {
         if (photoId != -1) {
             try {
+                //elimina foto de la base de datos
                 boolean deleted = dbHelper.deletePhoto(photoId);
                 if (deleted) {
                     // Intentar eliminar el archivo físico
@@ -124,6 +131,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
         }
     }
 
+    //cierra conexion con base de datos
     @Override
     protected void onDestroy() {
         super.onDestroy();

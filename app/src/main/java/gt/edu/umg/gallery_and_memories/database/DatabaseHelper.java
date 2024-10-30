@@ -18,7 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private Context context;
     private static final String DATABASE_NAME = "PhotoGallery.db";
     private static final int DATABASE_VERSION = 1;
-
+    //definicion de la tabla y columna
     private static final String TABLE_PHOTOS = "photos";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_URI = "uri";
@@ -27,12 +27,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_LATITUDE = "latitude";
     private static final String COLUMN_LONGITUDE = "longitude";
 
+    //inicializa el helper con la informacion
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
 
     @Override
+    //creacion de la tabla
     public void onCreate(SQLiteDatabase db) {
         String createTable = "CREATE TABLE " + TABLE_PHOTOS + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -50,6 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    //ingresa una foto a la base de datos
     public long insertPhoto(String uri, String description, String date, double latitude, double longitude) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -65,6 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
+    //obtiene todas las fotos en orden
     public List<PhotoItem> getAllPhotos() {
         List<PhotoItem> photoList = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_PHOTOS + " ORDER BY " + COLUMN_DATE + " DESC";
@@ -91,6 +95,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return photoList;
     }
 
+    //obtiene foto especifica por ID
     public PhotoItem getPhotoById(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
         PhotoItem photo = null;
@@ -115,6 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return photo;
     }
 
+    //elimina una foto
     public boolean deletePhoto(long id) {
         boolean success = false;
         SQLiteDatabase db = this.getWritableDatabase();
@@ -148,6 +154,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return success;
     }
 
+    //para actualizar la base de datos
     public boolean updatePhoto(PhotoItem photo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

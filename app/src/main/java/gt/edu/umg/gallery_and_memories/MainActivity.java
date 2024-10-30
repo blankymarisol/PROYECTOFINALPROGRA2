@@ -25,6 +25,7 @@ import gt.edu.umg.gallery_and_memories.gps.GpsActivity;
 import gt.edu.umg.gallery_and_memories.models.PhotoItem;
 
 public class MainActivity extends AppCompatActivity {
+    //VARIABLES DE CLASE
     Button bntSaludo, btndoxeo, btnselfi;
     TextView tvSaludo, lastPhotoDescription, lastPhotoDate;
     ImageView lastPhotoImage;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
+    //INICIALIZA VISTAS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //ABRIR GPSACTIVITY
     private void setupClickListeners() {
         btndoxeo.setOnClickListener(view -> {
             try {
@@ -77,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //BOTON PARA ABRIR GALERIAACTIVITY
         btnselfi.setOnClickListener(view -> {
             try {
                 Intent intent = new Intent(MainActivity.this, GaleriaActivity.class);

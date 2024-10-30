@@ -29,6 +29,7 @@ import gt.edu.umg.gallery_and_memories.R;
 public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener {
 
+    //variables que almacenan referencias
     Button btndoxeo;
     private EditText txtLatitud, txtLongitud;
     private GoogleMap mMap;
@@ -40,29 +41,35 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gps_activity);
 
-
+        //inicializar vistas
         btndoxeo = findViewById(R.id.btndoxeo);
         txtLatitud = findViewById(R.id.txtLatitud);
         txtLongitud = findViewById(R.id.txtLongitud);
 
+        //configura fragmento del mapa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
 
+        //configuracion boton de regreso
         btndoxeo.setOnClickListener(view ->{
             finish();
         });
 
+        //cierre de ubicacion
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getCurrentLocation();
     }
 
+    //obtener ubicacion actual
     private void getCurrentLocation() {
         try {
+            //verifica permisos
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED &&
+                    //solicita permisos si estan negados
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                             != PackageManager.PERMISSION_GRANTED) {
 
@@ -75,6 +82,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                 return;
             }
 
+            //obtiene ubicacion
             fusedLocationProviderClient.getLastLocation()
                     .addOnSuccessListener(location -> {
                         if (location != null) {
@@ -92,6 +100,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    //actualizar ubicacion
     private void updateMapLocation(Location location) {
         LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.addMarker(new MarkerOptions().position(userLocation).title("Mi Ubicación"));
@@ -100,6 +109,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         txtLongitud.setText(String.valueOf(location.getLongitude()));
     }
 
+    //maneja las repsuestas de los permisos
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -113,12 +123,14 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    //inicializa el mapa
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnMapClickListener(this);
         mMap.setOnMapLongClickListener(this);
 
+        //ubicacion por defecto (GUATEMALA)
         LatLng defaultLocation = new LatLng(14.3558695, -89.8573078);
         mMap.addMarker(new MarkerOptions().position(defaultLocation).title("Guatemala"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(defaultLocation));
